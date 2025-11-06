@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    public float moveForce = 2f;
+    public float moveForce = 20f;
 
     [SerializeField]
     public float jumpForce = 11f;
@@ -20,19 +20,14 @@ public class Player : MonoBehaviour
     private bool isGrounded;
     private string GROUND_TAG = "Ground";
 
-    private string OBSTACLE_TAG = "Obstacle";
-
     private Vector2 startPosition = new Vector2(7.37f, 0.04f);
-    public float heatIncreaseRate = 1f;
-
-    public float speed = 3f;
-
-    public Slider heatBar;
+    public float speed = 15f;
 
     void Start()
     {
         playerBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        
 
         sr = GetComponent<SpriteRenderer>();
         playerBody.gravityScale = 4.5f;
@@ -43,12 +38,6 @@ public class Player : MonoBehaviour
         PlayerMoveKeyboard();
         AnimatePlayer();
         PlayerJump();
-
-
-        if (heatBar.value <= 0)
-        {
-            ResetPlayer();
-        }
     }
 
     void PlayerMoveKeyboard()
@@ -89,12 +78,6 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag(GROUND_TAG))
         {
             isGrounded = true;
-        }
-
-        // HAVE TO MAKE OBSTACLE TAGS ON SELENAS CODE THAT'S ALL!!!
-        if (collision.gameObject.CompareTag(OBSTACLE_TAG))
-        {
-            ResetPlayer();
         }
     }
 
