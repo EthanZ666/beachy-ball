@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _moveForce = 20f;
+    private float _moveForce = 15f;
 
     [SerializeField]
-    private float _jumpForce = 10f;
+    private float _jumpForce = 15f;
 
     private float _movementX;
     private Rigidbody2D _playerBody;
