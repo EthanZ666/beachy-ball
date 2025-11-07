@@ -481,8 +481,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb5ab0b273b7419d8a36fdcf1548d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  moveForce: 20
-  jumpForce: 11
+  _moveForce: 20
+  _jumpForce: 10
 --- !u!58 &1906726499
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -778,8 +778,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb5ab0b273b7419d8a36fdcf1548d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  moveForce: 20
-  jumpForce: 11
+  _moveForce: 20
+  _jumpForce: 10
 --- !u!50 &1913212986
 Rigidbody2D:
   serializedVersion: 5
@@ -836,8 +836,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26de118596c7472c8ddd5043606859e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
-  player1: {fileID: 1913212985}
-  player2: {fileID: 1906726498}
+  Player1: {fileID: 1913212985}
+  Player2: {fileID: 1906726498}
 --- !u!4 &2003501321
 Transform:
   m_ObjectHideFlags: 0

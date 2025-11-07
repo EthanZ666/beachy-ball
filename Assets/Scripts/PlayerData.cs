@@ -28,4 +28,14 @@ public class PlayerData
     {
         return _jumpKey;
     }
+
+    public static PlayerData CreateArrowData()
+    {
+        return new PlayerData (KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow);
+    }
+
+    public static PlayerData CreateWASDData()
+    {
+        return new PlayerData(KeyCode.A, KeyCode.D, KeyCode.W);
+    }
 }
