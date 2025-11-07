@@ -15,10 +15,10 @@ public class Player : MonoBehaviour
     private Rigidbody2D _playerBody;
     private SpriteRenderer _sr;
     private Animator _anim;
-    private string WALK_ANIMATION = "Walk";
+    private static string WALK_ANIMATION = "Walk";
 
     private bool _isGrounded;
-    private string GROUND_TAG = "Ground";
+    private static string GROUND_TAG = "Ground";
 
     private KeyCode _leftKey;
     private KeyCode _rightKey;
@@ -33,9 +33,9 @@ public class Player : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _playerBody.gravityScale = 4.5f;
 
-        _leftKey = data.leftKey;
-        _rightKey = data.rightKey;
-        _jumpKey = data.jumpKey;
+        _leftKey = data.GetLeftKey();
+        _rightKey = data.GetRightKey();
+        _jumpKey = data.GetJumpKey();
     }
 
     public void Update()

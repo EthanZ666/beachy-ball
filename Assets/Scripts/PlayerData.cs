@@ -3,14 +3,29 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData
 {
-    public KeyCode leftKey;
-    public KeyCode rightKey;
-    public KeyCode jumpKey;
+    private KeyCode _leftKey;
+    private KeyCode _rightKey;
+    private KeyCode _jumpKey;
 
     public PlayerData(KeyCode left, KeyCode right, KeyCode jump)
     {
-        leftKey = left;
-        rightKey = right;
-        jumpKey = jump;
+        _leftKey = left;
+        _rightKey = right;
+        _jumpKey = jump;
+    }
+
+    public KeyCode GetLeftKey()
+    {
+        return _leftKey;
+    }
+
+    public KeyCode GetRightKey()
+    {
+        return _rightKey;
+    }
+
+    public KeyCode GetJumpKey()
+    {
+        return _jumpKey;
     }
 }
