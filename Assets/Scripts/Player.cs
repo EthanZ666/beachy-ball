@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     private float _moveForce = 20f;
 
     [SerializeField]
-    private float _jumpForce = 5f;
+    private float _jumpForce = 10f;
 
     private float _movementX;
     private Rigidbody2D _playerBody;
