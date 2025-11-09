@@ -151,8 +151,8 @@ MonoBehaviour:
   layers:
   - coinPrefabs:
     - {fileID: 717532213}
-    minY: 0
-    maxY: 2
+    minY: -2
+    maxY: -1.5
     maxCoin: 5
     currentCoin: 0
   spawnInterval: 8
@@ -1233,8 +1233,8 @@ MonoBehaviour:
   layers:
   - coinPrefabs:
     - {fileID: 900100200}
-    minY: -6
-    maxY: -3
+    minY: -4.8
+    maxY: -3.8
     maxCoin: 5
     currentCoin: 0
   spawnInterval: 3
@@ -1769,6 +1769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1095745208}
   - component: {fileID: 1095745207}
+  - component: {fileID: 1095745209}
   m_Layer: 0
   m_Name: CoinSpawner
   m_TagString: Untagged
@@ -1792,7 +1793,7 @@ MonoBehaviour:
   - coinPrefabs:
     - {fileID: 1827641633}
     minY: -3.5
-    maxY: -0.5
+    maxY: -2
     maxCoin: 5
     currentCoin: 0
   spawnInterval: 5
@@ -1813,6 +1814,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1095745209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1095745206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116f4fc892495dc448293107782c0e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinCollision
+  moneyManager: {fileID: 1560349623}
+  coin: {fileID: 1827641633}
 --- !u!1 &1154553292
 GameObject:
   m_ObjectHideFlags: 0
