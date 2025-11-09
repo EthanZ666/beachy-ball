@@ -30,11 +30,12 @@ public class Player : MonoBehaviour
     private float _idleTimer = 0f;
     private float _idleDelay = 30f;
     private bool _isIdle = false;
+    private bool _idlePlaying = false;
+    private float _idleAnimationDuration = 0.5f;
 
     private void Awake()
     {
         _playerBody = GetComponent<Rigidbody2D>();
-        _anim = GetComponent<Animator>();
         _sr = GetComponent<SpriteRenderer>();
     }
     
@@ -52,7 +53,7 @@ public class Player : MonoBehaviour
         Move();
         AnimateWalk();
         Jump();
-        IdleTimer();
+        HandleIdle();
     }
 
     public void Move()
@@ -69,26 +70,25 @@ public class Player : MonoBehaviour
         }
 
         Vector2 vel = _playerBody.linearVelocity;
-        vel.x = _movementX * _moveForce; // <-- multiply by moveForce
+        vel.x = _movementX * _moveForce;
         _playerBody.linearVelocity = vel;
 
     }
 
-    public void AnimateWalk()
+    public virtual void AnimateWalk()
     {
+        
         if (_movementX > 0)
         {
             _sr.flipX = true;
-            _anim.SetBool(WALK_ANIMATION, true);
-        }
-        else if (_movementX < 0)
+            this.GetAnimator().SetBool(WALK_ANIMATION, true); 
+        } else if (_movementX < 0) 
         {
             _sr.flipX = false;
-            _anim.SetBool(WALK_ANIMATION, true);
-        }
-        else
+            this.GetAnimator().SetBool(WALK_ANIMATION, true); 
+        } else
         {
-            _anim.SetBool(WALK_ANIMATION, false);
+            this.GetAnimator().SetBool(WALK_ANIMATION, false);
         }
     }
 
@@ -97,7 +97,6 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(_jumpKey) && _isGrounded)
         {
             _isGrounded = false;
-            // _playerBody.AddForce(new Vector2(0f, _jumpForce), ForceMode2D.Impulse);
             Vector2 vel = _playerBody.linearVelocity;
             vel.y = _jumpForce;
             _playerBody.linearVelocity = vel;
@@ -112,38 +111,35 @@ public class Player : MonoBehaviour
         }
     }
 
-    public virtual void PlayIdleAnimation() { }
-
-    public void IdleTimer()
+    private void HandleIdle()
     {
         if (_movementX != 0f || Input.GetKey(_jumpKey))
         {
             _idleTimer = 0f;
-            _isIdle = false;
+            _idlePlaying = false;
+            return;
         }
-        else
-        {
-            _idleTimer += Time.deltaTime;
 
-            if (_idleTimer >= _idleDelay && !_isIdle)
-            {
-                _isIdle = true;
-                PlayIdleAnimation();
-                StartCoroutine(WaitAndStopIdle());
-            }
+        _idleTimer += Time.deltaTime;
+
+        if (_idleTimer >= _idleDelay && !_idlePlaying)
+        {
+            _idlePlaying = true;
+            PlayIdleAnimation();
+            StartCoroutine(StopIdleAfterAnimation());
         }
     }
-    private IEnumerator WaitAndStopIdle()
+
+    private IEnumerator StopIdleAfterAnimation()
     {
-        yield return new WaitForSeconds(0.3f);
-        StopIdleAnimation();
-        _isIdle = false;
+        yield return new WaitForSeconds(_idleAnimationDuration);
+        _idlePlaying = false;
         _idleTimer = 0f;
     }
 
-    public virtual void StopIdleAnimation() { }
+    public virtual void PlayIdleAnimation() { }
 
-    public Animator GetAnimator()
+    public virtual Animator GetAnimator()
     {
         return this._anim;
     }

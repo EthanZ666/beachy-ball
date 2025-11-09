@@ -11,16 +11,14 @@ public class PlayerOne : Player
 
     public override void PlayIdleAnimation()
     {
-        Transform sprite = transform.Find("AnimSprite");
-        Animator anim = sprite.GetComponent<Animator>();
-        anim.SetTrigger("IdleOne");
+        this.GetAnimator().SetTrigger(IDLE_ANIMATION);
     }
 
-    public override void StopIdleAnimation()
+    public override Animator GetAnimator()
     {
         Transform sprite = transform.Find("AnimSprite");
         Animator anim = sprite.GetComponent<Animator>();
-        anim.ResetTrigger("IdleOne");
+        return anim;
     }
 
 }

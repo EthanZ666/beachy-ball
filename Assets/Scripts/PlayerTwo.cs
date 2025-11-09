@@ -11,13 +11,13 @@ public class PlayerTwo : Player
 
     public override void PlayIdleAnimation()
     {
-        var anim = this.GetAnimator();
-        anim.SetBool(IDLE_ANIMATION, true);
+        this.GetAnimator().SetTrigger(IDLE_ANIMATION);
     }
 
-    public override void StopIdleAnimation()
+    public override Animator GetAnimator()
     {
-        var anim = this.GetAnimator();
-        anim.SetBool(IDLE_ANIMATION, false);
+        Transform sprite = transform.Find("AnimSprite2");
+        Animator anim = sprite.GetComponent<Animator>();
+        return anim;
     }
 }
