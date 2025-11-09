@@ -27,11 +27,11 @@ public class CoinCollision : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<Coin>() != null)
+        if (other.gameObject.GetComponent<Player>() != null)
         // Set to player after
         {
             moneyManager.AddMoney(coin.value);
-            Destroy(coin);
+            Destroy(gameObject);
         }
     }
 
