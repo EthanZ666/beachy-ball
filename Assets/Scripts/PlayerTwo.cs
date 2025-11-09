@@ -4,7 +4,7 @@ public class PlayerTwo : Player
 {
     private static string IDLE_ANIMATION = "IdleTwo";
 
-    public override void Initialize(PlayerData data)
+    public override void Initialize(PlayerKeyData data)
     {
         base.Initialize(data);
     }

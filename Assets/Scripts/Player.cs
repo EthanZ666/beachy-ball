@@ -23,9 +23,7 @@ public class Player : MonoBehaviour
     private bool _isGrounded;
     private static string GROUND_TAG = "Ground";
 
-    private KeyCode _leftKey;
-    private KeyCode _rightKey;
-    private KeyCode _jumpKey;
+    private PlayerKeyData _keyData;
 
     private float _idleTimer = 0f;
     private float _idleDelay = 30f;
@@ -39,13 +37,11 @@ public class Player : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
     }
     
-    public virtual void Initialize(PlayerData data)
+    public virtual void Initialize(PlayerKeyData data)
     {
         _playerBody.gravityScale = 4.5f;
 
-        _leftKey = data.GetLeftKey();
-        _rightKey = data.GetRightKey();
-        _jumpKey = data.GetJumpKey();
+        _keyData = data;
     }
 
     public void Update()
@@ -59,12 +55,12 @@ public class Player : MonoBehaviour
     public void Move()
     {
         _movementX = 0f;
-        if (Input.GetKey(_leftKey))
+        if (Input.GetKey(_keyData.GetLeftKey()))
         {
             _movementX = -1f;
         }
         
-        if (Input.GetKey(_rightKey))
+        if (Input.GetKey(_keyData.GetRightKey()))
         {
             _movementX = 1f;
         }
@@ -77,16 +73,17 @@ public class Player : MonoBehaviour
 
     public virtual void AnimateWalk()
     {
-        
         if (_movementX > 0)
         {
             _sr.flipX = true;
-            this.GetAnimator().SetBool(WALK_ANIMATION, true); 
-        } else if (_movementX < 0) 
+            this.GetAnimator().SetBool(WALK_ANIMATION, true);
+        }
+        else if (_movementX < 0)
         {
             _sr.flipX = false;
-            this.GetAnimator().SetBool(WALK_ANIMATION, true); 
-        } else
+            this.GetAnimator().SetBool(WALK_ANIMATION, true);
+        }
+        else
         {
             this.GetAnimator().SetBool(WALK_ANIMATION, false);
         }
@@ -94,7 +91,7 @@ public class Player : MonoBehaviour
 
     public void Jump()
     {
-        if (Input.GetKeyDown(_jumpKey) && _isGrounded)
+        if (Input.GetKeyDown(_keyData.GetJumpKey()) && _isGrounded)
         {
             _isGrounded = false;
             Vector2 vel = _playerBody.linearVelocity;
@@ -113,7 +110,7 @@ public class Player : MonoBehaviour
 
     private void HandleIdle()
     {
-        if (_movementX != 0f || Input.GetKey(_jumpKey))
+        if (_movementX != 0f || Input.GetKey(_keyData.GetJumpKey()))
         {
             _idleTimer = 0f;
             _idlePlaying = false;
@@ -130,14 +127,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    public virtual void PlayIdleAnimation() { }
+
     private IEnumerator StopIdleAfterAnimation()
     {
         yield return new WaitForSeconds(_idleAnimationDuration);
         _idlePlaying = false;
         _idleTimer = 0f;
     }
-
-    public virtual void PlayIdleAnimation() { }
 
     public virtual Animator GetAnimator()
     {
@@ -154,7 +151,7 @@ public class Player : MonoBehaviour
         if (newForce > 0f && newForce <= 25f)
             _moveForce = newForce;
         else
-            throw new Exception("Invalid move force value.");
+            throw new Exception("Invalid move force value: Must be between 0 and 25");
     }
 
     public float GetJumpForce()
@@ -167,6 +164,6 @@ public class Player : MonoBehaviour
         if (newForce > 0f && newForce <= 20f)
             _jumpForce = newForce;
         else
-            throw new Exception("Invalid jump force value.");
+            throw new Exception("Invalid jump force value: Must be between 0 and 20");
     }
 }

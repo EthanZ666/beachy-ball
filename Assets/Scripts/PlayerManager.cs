@@ -7,8 +7,8 @@ public class PlayerManager : MonoBehaviour
     
     void Start()
     {
-        PlayerData player1Data = PlayerData.CreateArrowData();
-        PlayerData player2Data = PlayerData.CreateWASDData();
+        PlayerKeyData player1Data = PlayerKeyData.CreateArrowData();
+        PlayerKeyData player2Data = PlayerKeyData.CreateWASDData();
         
         Player1.Initialize(player1Data);
         Player2.Initialize(player2Data);
