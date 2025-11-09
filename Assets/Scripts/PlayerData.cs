@@ -9,24 +9,24 @@ public class PlayerData
 
     public PlayerData(KeyCode left, KeyCode right, KeyCode jump)
     {
-        _leftKey = left;
-        _rightKey = right;
-        _jumpKey = jump;
+        this._leftKey = left;
+        this._rightKey = right;
+        this._jumpKey = jump;
     }
 
     public KeyCode GetLeftKey()
     {
-        return _leftKey;
+        return this._leftKey;
     }
 
     public KeyCode GetRightKey()
     {
-        return _rightKey;
+        return this._rightKey;
     }
 
     public KeyCode GetJumpKey()
     {
-        return _jumpKey;
+        return this._jumpKey;
     }
 
     public static PlayerData CreateArrowData()

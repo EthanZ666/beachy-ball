@@ -1,21 +1,24 @@
+using System;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _moveForce = 15f;
+    private float _moveForce = 12f;
 
     [SerializeField]
-    private float _jumpForce = 15f;
+    private float _jumpForce = 14f;
 
     private float _movementX;
     private Rigidbody2D _playerBody;
     private SpriteRenderer _sr;
     private Animator _anim;
     private static string WALK_ANIMATION = "Walk";
+    private static string IDLE = "Idle";
 
     private bool _isGrounded;
     private static string GROUND_TAG = "Ground";
@@ -23,14 +26,20 @@ public class Player : MonoBehaviour
     private KeyCode _leftKey;
     private KeyCode _rightKey;
     private KeyCode _jumpKey;
-    
-    public void Initialize(PlayerData data)
+
+    private float _idleTimer = 0f;
+    private float _idleDelay = 30f;
+    private bool _isIdle = false;
+
+    private void Awake()
     {
         _playerBody = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-        
-
         _sr = GetComponent<SpriteRenderer>();
+    }
+    
+    public virtual void Initialize(PlayerData data)
+    {
         _playerBody.gravityScale = 4.5f;
 
         _leftKey = data.GetLeftKey();
@@ -41,11 +50,12 @@ public class Player : MonoBehaviour
     public void Update()
     {
         Move();
-        Animate();
+        AnimateWalk();
         Jump();
+        IdleTimer();
     }
 
-    private void Move()
+    public void Move()
     {
         _movementX = 0f;
         if (Input.GetKey(_leftKey))
@@ -56,12 +66,15 @@ public class Player : MonoBehaviour
         if (Input.GetKey(_rightKey))
         {
             _movementX = 1f;
-        } 
+        }
 
-        transform.position += new Vector3(_movementX, 0f, 0f) * Time.deltaTime * _moveForce;
+        Vector2 vel = _playerBody.linearVelocity;
+        vel.x = _movementX * _moveForce; // <-- multiply by moveForce
+        _playerBody.linearVelocity = vel;
+
     }
 
-    private void Animate()
+    public void AnimateWalk()
     {
         if (_movementX > 0)
         {
@@ -79,20 +92,85 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Jump()
+    public void Jump()
     {
         if (Input.GetKeyDown(_jumpKey) && _isGrounded)
         {
             _isGrounded = false;
-            _playerBody.AddForce(new Vector2(0f, _jumpForce), ForceMode2D.Impulse);
+            // _playerBody.AddForce(new Vector2(0f, _jumpForce), ForceMode2D.Impulse);
+            Vector2 vel = _playerBody.linearVelocity;
+            vel.y = _jumpForce;
+            _playerBody.linearVelocity = vel;
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(GROUND_TAG))
         {
             _isGrounded = true;
         }
+    }
+
+    public virtual void PlayIdleAnimation() { }
+
+    public void IdleTimer()
+    {
+        if (_movementX != 0f || Input.GetKey(_jumpKey))
+        {
+            _idleTimer = 0f;
+            _isIdle = false;
+        }
+        else
+        {
+            _idleTimer += Time.deltaTime;
+
+            if (_idleTimer >= _idleDelay && !_isIdle)
+            {
+                _isIdle = true;
+                PlayIdleAnimation();
+                StartCoroutine(WaitAndStopIdle());
+            }
+        }
+    }
+    private IEnumerator WaitAndStopIdle()
+    {
+        yield return new WaitForSeconds(0.3f);
+        StopIdleAnimation();
+        _isIdle = false;
+        _idleTimer = 0f;
+    }
+
+    public virtual void StopIdleAnimation() { }
+
+    public Animator GetAnimator()
+    {
+        return this._anim;
+    }
+
+    public float GetMoveForce()
+    {
+        return this._moveForce;
+    }
+
+    public void SetMoveForce(float newForce)
+    {
+        if (newForce > 0f && newForce <= 25f)
+            _moveForce = newForce;
+        else
+            throw new Exception("Invalid move force value.");
+    }
+
+    public float GetJumpForce()
+    {
+        return this._jumpForce;
+    }
+
+    public void SetJumpForce(float newForce)
+    {
+        if (newForce > 0f && newForce <= 20f)
+            _jumpForce = newForce;
+        else
+            throw new Exception("Invalid jump force value.");
     }
 }

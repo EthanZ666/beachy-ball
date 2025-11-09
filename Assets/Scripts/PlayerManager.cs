@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public Player Player1;
-    public Player Player2;
+    public PlayerOne Player1;
+    public PlayerTwo Player2;
     
     void Start()
     {
