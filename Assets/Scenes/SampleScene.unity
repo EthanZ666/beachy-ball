@@ -296,7 +296,7 @@ Transform:
   m_GameObject: {fileID: 142140388}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 3.96, z: 0}
+  m_LocalPosition: {x: -0.02, y: 3.96, z: 0}
   m_LocalScale: {x: 2.31149, y: 2.292158, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -341,13 +341,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e120548c8974654aa833213ed52078a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallCollision2D
-  scoreTracker: {fileID: 250080330}
+  scoreTracker: {fileID: 0}
   side1Tag: FloorSide1
   side2Tag: FloorSide2
-  player1Spawn: {fileID: 0}
-  player2Spawn: {fileID: 0}
+  player1Spawn: {fileID: 1467178312}
+  player2Spawn: {fileID: 553314011}
   serveDelaySeconds: 3
   randomizeFirstSpawn: 1
+  liftOffFloor: 0.05
 --- !u!1 &216262753
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,6 +799,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreTracker
   Player1ScoreValue: {fileID: 1355156112}
   Player2ScoreValue: {fileID: 1255660369}
+  winningScore: 5
+  ball: {fileID: 0}
 --- !u!4 &250080331
 Transform:
   m_ObjectHideFlags: 0
@@ -6534,6 +6537,7 @@ MonoBehaviour:
   player2Spawn: {fileID: 553314011}
   serveDelaySeconds: 3
   randomizeFirstSpawn: 1
+  liftOffFloor: 0.05
 --- !u!1 &1909561121
 GameObject:
   m_ObjectHideFlags: 0
