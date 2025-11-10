@@ -21,7 +21,9 @@ public class Player : MonoBehaviour
     private static string IDLE = "Idle";
 
     private bool _isGrounded;
-    private static string GROUND_TAG = "Ground";
+    private static string GROUND1_TAG = "FloorSide1";
+    private static string GROUND2_TAG = "FloorSide2";
+
 
     private PlayerKeyData _keyData;
 
@@ -35,6 +37,8 @@ public class Player : MonoBehaviour
     {
         _playerBody = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
+        // ensure we have a reference to an Animator (falls back to child if assigned there)
+        _anim = GetComponentInChildren<Animator>();
     }
     
     public virtual void Initialize(PlayerKeyData data)
@@ -103,9 +107,32 @@ public class Player : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag(GROUND_TAG))
+        if (collision.gameObject.CompareTag(GROUND1_TAG) || collision.gameObject.CompareTag(GROUND2_TAG))
         {
             _isGrounded = true;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(GROUND1_TAG) || collision.gameObject.CompareTag(GROUND2_TAG))
+        {
+            foreach (var contact in collision.contacts)
+            {
+                if (contact.normal.y > 0.5f)
+                {
+                    _isGrounded = true;
+                    return;
+                }
+            }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(GROUND1_TAG) || collision.gameObject.CompareTag(GROUND2_TAG))
+        {
+            _isGrounded = false;
         }
     }
 
