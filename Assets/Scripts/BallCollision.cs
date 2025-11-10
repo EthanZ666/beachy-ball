@@ -7,15 +7,15 @@ public class BallCollision2D : MonoBehaviour
     [SerializeField] private ScoreTracker scoreTracker;
 
     [Header("Tags on floor halves")]
-    [SerializeField] private string side1Tag = "FloorSide1"; // hit here -> Player 2 scores
-    [SerializeField] private string side2Tag = "FloorSide2"; // hit here -> Player 1 scores
+    [SerializeField] private string side1Tag = "FloorSide1";
+    [SerializeField] private string side2Tag = "FloorSide2";
 
     [Header("Serve / Reset")]
-    [SerializeField] private Transform player1Spawn;   // where to place ball when P1 serves/scores
-    [SerializeField] private Transform player2Spawn;   // where to place ball when P2 serves/scores
-    [SerializeField] private float serveDelaySeconds = 3f; // wait before dropping ball
+    [SerializeField] private Transform player1Spawn;
+    [SerializeField] private Transform player2Spawn;
+    [SerializeField] private float serveDelaySeconds = 3f;
     [SerializeField] private bool randomizeFirstSpawn = true;
-    [SerializeField] private float liftOffFloor = 0.05f;   // tiny Y offset above spawn to avoid overlap
+    [SerializeField] private float liftOffFloor = 0.05f;
 
     private Rigidbody2D rb;
     private bool scoredThisRally;
@@ -30,8 +30,20 @@ public class BallCollision2D : MonoBehaviour
     void Start()
     {
         Debug.Log($"P1 spawn: {player1Spawn?.position} | P2 spawn: {player2Spawn?.position}");
-        int startSide = randomizeFirstSpawn ? (Random.value < 0.5f ? 1 : 2) : 1;
-        StartCoroutine(ServeFrom(startSide));
+        ServeRandom();
+    }
+
+    public void ResetRally()
+    {
+        scoredThisRally = false;
+    }
+
+        public void ServeRandom()
+    {
+
+        int side = Random.value < 0.5f ? 1 : 2;
+        StopAllCoroutines();
+        StartCoroutine(ServeFrom(side));
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -56,12 +68,10 @@ public class BallCollision2D : MonoBehaviour
 
     private IEnumerator ServeFrom(int side)
     {
-        // Freeze & clear motion
         rb.simulated = false;
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
 
-        // Teleport (preserve current Z in case your camera expects it)
         Transform spawn = side == 1 ? player1Spawn : player2Spawn;
         if (spawn == null)
         {
@@ -71,12 +81,11 @@ public class BallCollision2D : MonoBehaviour
         {
             Vector3 target = new Vector3(spawn.position.x, spawn.position.y + liftOffFloor, transform.position.z);
             transform.SetPositionAndRotation(target, Quaternion.identity);
-            rb.position = target;                 // belt & suspenders
-            Physics2D.SyncTransforms();           // make physics see the new transform immediately
+            rb.position = target;
+            Physics2D.SyncTransforms();
             Debug.Log($"Teleported to side {side} at {target}");
         }
 
-        // Wait in REAL time so this works even if Time.timeScale == 0
         float t = 0f, delay = Mathf.Max(0f, serveDelaySeconds);
         while (t < delay)
         {
