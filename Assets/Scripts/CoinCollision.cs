@@ -32,6 +32,7 @@ public class CoinCollision : MonoBehaviour
         {
             moneyManager.AddMoney(coin.value);
             Destroy(gameObject);
+            AudioManager.Instance.PlaySFX("Coin");
         }
     }
 
