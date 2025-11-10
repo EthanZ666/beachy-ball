@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - FloorSide1
+  - FloorSide2
   layers:
   - Default
   - TransparentFX
