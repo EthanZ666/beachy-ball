@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ScoreTracker : MonoBehaviour
 {
@@ -49,12 +50,17 @@ public class ScoreTracker : MonoBehaviour
         if (ball != null)
         {
             ball.ResetRally();
-            ball.ServeRandom(); 
+            ball.ServeRandom();
         }
         else
         {
             Debug.LogWarning("ScoreTracker: No BallCollision2D reference set; cannot respawn the ball.");
         }
+
+        PlayerPrefs.SetString("Winner", $"Player {winner}");
+        PlayerPrefs.SetInt("Player1Score", player1Score);
+        PlayerPrefs.SetInt("Player2Score", player2Score);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(2);
     }
 
     private void UpdateScoreDisplay()
