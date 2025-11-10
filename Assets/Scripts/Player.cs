@@ -97,6 +97,7 @@ public class Player : MonoBehaviour
             Vector2 vel = _playerBody.linearVelocity;
             vel.y = _jumpForce;
             _playerBody.linearVelocity = vel;
+            AudioManager.Instance.PlaySFX("Jump");
         }
     }
 
