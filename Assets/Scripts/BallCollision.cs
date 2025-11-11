@@ -4,38 +4,38 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class BallCollision2D : MonoBehaviour
 {
-    [SerializeField] private ScoreTracker scoreTracker;
+    [SerializeField] private ScoreTracker _scoreTracker;
 
     [Header("Tags on floor halves")]
-    [SerializeField] private string side1Tag = "FloorSide1";
-    [SerializeField] private string side2Tag = "FloorSide2";
+    [SerializeField] private string _side1Tag = "FloorSide1";
+    [SerializeField] private string _side2Tag = "FloorSide2";
 
     [Header("Serve / Reset")]
-    [SerializeField] private Transform player1Spawn;
-    [SerializeField] private Transform player2Spawn;
-    [SerializeField] private float serveDelaySeconds = 3f;
-    [SerializeField] private bool randomizeFirstSpawn = true;
-    [SerializeField] private float liftOffFloor = 0.05f;
+    [SerializeField] private Transform _player1Spawn;
+    [SerializeField] private Transform _player2Spawn;
+    [SerializeField] private float _serveDelaySeconds = 3f;
+    [SerializeField] private bool _randomizeFirstSpawn = true;
+    [SerializeField] private float _liftOffFloor = 0.05f;
 
     private Rigidbody2D rb;
-    private bool scoredThisRally;
+    private bool _scoredThisRally;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        if (scoreTracker == null)
-            scoreTracker = Object.FindFirstObjectByType<ScoreTracker>();
+        if (_scoreTracker == null)
+            _scoreTracker = Object.FindFirstObjectByType<ScoreTracker>();
     }
 
     void Start()
     {
-        Debug.Log($"P1 spawn: {player1Spawn?.position} | P2 spawn: {player2Spawn?.position}");
+        Debug.Log($"P1 spawn: {_player1Spawn?.position} | P2 spawn: {_player2Spawn?.position}");
         ServeRandom();
     }
 
     public void ResetRally()
     {
-        scoredThisRally = false;
+        _scoredThisRally = false;
     }
 
         public void ServeRandom()
@@ -48,20 +48,20 @@ public class BallCollision2D : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (scoredThisRally || scoreTracker == null) return;
+        if (_scoredThisRally || _scoreTracker == null) return;
 
         var other = collision.collider;
 
-        if (other.CompareTag(side1Tag))
+        if (other.CompareTag(_side1Tag))
         {
-            scoreTracker.AddScoreToPlayer2();
-            scoredThisRally = true;
+            _scoreTracker.AddScoreToPlayer2();
+            _scoredThisRally = true;
             StartCoroutine(ServeFrom(2));
         }
-        else if (other.CompareTag(side2Tag))
+        else if (other.CompareTag(_side2Tag))
         {
-            scoreTracker.AddScoreToPlayer1();
-            scoredThisRally = true;
+            _scoreTracker.AddScoreToPlayer1();
+            _scoredThisRally = true;
             StartCoroutine(ServeFrom(1));
         }
     }
@@ -72,15 +72,15 @@ public class BallCollision2D : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
 
-        Transform spawn = side == 1 ? player1Spawn : player2Spawn;
+        Transform spawn = side == 1 ? _player1Spawn : _player2Spawn;
 
-        Vector3 target = new Vector3(spawn.position.x, spawn.position.y + liftOffFloor, transform.position.z);
+        Vector3 target = new Vector3(spawn.position.x, spawn.position.y + _liftOffFloor, transform.position.z);
         transform.SetPositionAndRotation(target, Quaternion.identity);
         rb.position = target;
         Physics2D.SyncTransforms();
         Debug.Log($"Teleported to side {side} at {target}");
 
-        float t = 0f, delay = Mathf.Max(0f, serveDelaySeconds);
+        float t = 0f, delay = Mathf.Max(0f, _serveDelaySeconds);
         while (t < delay)
         {
             t += Time.unscaledDeltaTime;
@@ -89,6 +89,6 @@ public class BallCollision2D : MonoBehaviour
 
         rb.simulated = true;
         rb.WakeUp();
-        scoredThisRally = false;
+        _scoredThisRally = false;
     }
 }
