@@ -38,7 +38,7 @@ public class BallCollision2D : MonoBehaviour
         _scoredThisRally = false;
     }
 
-        public void ServeRandom()
+    public void ServeRandom()
     {
 
         int side = Random.value < 0.5f ? 1 : 2;
