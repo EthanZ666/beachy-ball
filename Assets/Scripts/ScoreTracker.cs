@@ -53,9 +53,6 @@ public class ScoreTracker : MonoBehaviour
             ball.ServeRandom();
         }
         else
-        {
-            Debug.LogWarning("ScoreTracker: No BallCollision2D reference set; cannot respawn the ball.");
-        }
 
         PlayerPrefs.SetString("Winner", $"Player {winner}");
         PlayerPrefs.SetInt("Player1Score", player1Score);

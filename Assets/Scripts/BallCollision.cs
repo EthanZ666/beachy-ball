@@ -73,18 +73,12 @@ public class BallCollision2D : MonoBehaviour
         rb.angularVelocity = 0f;
 
         Transform spawn = side == 1 ? player1Spawn : player2Spawn;
-        if (spawn == null)
-        {
-            Debug.LogWarning($"Spawn for side {side} not set. Staying put.");
-        }
-        else
-        {
-            Vector3 target = new Vector3(spawn.position.x, spawn.position.y + liftOffFloor, transform.position.z);
-            transform.SetPositionAndRotation(target, Quaternion.identity);
-            rb.position = target;
-            Physics2D.SyncTransforms();
-            Debug.Log($"Teleported to side {side} at {target}");
-        }
+
+        Vector3 target = new Vector3(spawn.position.x, spawn.position.y + liftOffFloor, transform.position.z);
+        transform.SetPositionAndRotation(target, Quaternion.identity);
+        rb.position = target;
+        Physics2D.SyncTransforms();
+        Debug.Log($"Teleported to side {side} at {target}");
 
         float t = 0f, delay = Mathf.Max(0f, serveDelaySeconds);
         while (t < delay)
@@ -97,12 +91,4 @@ public class BallCollision2D : MonoBehaviour
         rb.WakeUp();
         scoredThisRally = false;
     }
-
-#if UNITY_EDITOR
-    void OnValidate()
-    {
-        if (serveDelaySeconds < 0f) serveDelaySeconds = 0f;
-        if (liftOffFloor < 0f) liftOffFloor = 0f;
-    }
-#endif
 }
